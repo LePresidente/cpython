@@ -62,6 +62,13 @@ static long main_thread;
 #define tzname _tzname
 #define daylight _daylight
 #endif /* __BORLANDC__ */
+
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+#define timezone _timezone
+#define tzname _tzname
+#define daylight _daylight
+#endif /* defined(_MSC_VER) && _MSC_VER >= 1900 */
+
 #endif /* MS_WINDOWS */
 #endif /* !__WATCOMC__ || __QNX__ */
 
