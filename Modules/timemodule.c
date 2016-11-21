@@ -62,6 +62,13 @@ static long main_thread;
 #define tzname _tzname
 #define daylight _daylight
 #endif /* __BORLANDC__ */
+
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+#define timezone _timezone
+#define tzname _tzname
+#define daylight _daylight
+#endif /* defined(_MSC_VER) && _MSC_VER >= 1900 */
+
 #endif /* MS_WINDOWS */
 #endif /* !__WATCOMC__ || __QNX__ */
 
@@ -505,7 +512,14 @@ time_strftime(PyObject *self, PyObject *args)
         if (outbuf == NULL) {
             return PyErr_NoMemory();
         }
+#if defined _MSC_VER && _MSC_VER >= 1400 && defined(__STDC_SECURE_LIB__)
+        _Py_BEGIN_SUPPRESS_IPH
+        _set_errno(0);
         buflen = strftime(outbuf, i, fmt, &buf);
+        _Py_END_SUPPRESS_IPH
+#else
+        buflen = strftime(outbuf, i, fmt, &buf);
+#endif
         if (buflen > 0 || i >= 256 * fmtlen) {
             /* If the buffer is 256 times as long as the format,
                it's probably not failing for lack of room!

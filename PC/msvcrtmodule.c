@@ -144,7 +144,10 @@ msvcrt_get_osfhandle(PyObject *self, PyObject *args)
     if (!_PyVerify_fd(fd))
         return PyErr_SetFromErrno(PyExc_IOError);
 
+    _Py_BEGIN_SUPPRESS_IPH
+    errno = 0;
     handle = _get_osfhandle(fd);
+    _Py_END_SUPPRESS_IPH
     if (handle == -1)
         return PyErr_SetFromErrno(PyExc_IOError);
 
@@ -205,7 +208,6 @@ was a special function key, this will return '\\000' or '\\xe0'; the next\n\
 call will return the keycode. The Control-C keypress cannot be read with\n\
 this function.");
 
-#ifdef _WCONIO_DEFINED
 static PyObject *
 msvcrt_getwch(PyObject *self, PyObject *args)
 {
@@ -226,7 +228,6 @@ PyDoc_STRVAR(getwch_doc,
 "getwch() -> Unicode key character\n\
 \n\
 Wide char variant of getch(), returning a Unicode value.");
-#endif
 
 static PyObject *
 msvcrt_getche(PyObject *self, PyObject *args)
@@ -250,7 +251,6 @@ PyDoc_STRVAR(getche_doc,
 Similar to getch(), but the keypress will be echoed if it represents\n\
 a printable character.");
 
-#ifdef _WCONIO_DEFINED
 static PyObject *
 msvcrt_getwche(PyObject *self, PyObject *args)
 {
@@ -271,7 +271,6 @@ PyDoc_STRVAR(getwche_doc,
 "getwche() -> Unicode key character\n\
 \n\
 Wide char variant of getche(), returning a Unicode value.");
-#endif
 
 static PyObject *
 msvcrt_putch(PyObject *self, PyObject *args)
@@ -291,7 +290,6 @@ PyDoc_STRVAR(putch_doc,
 \n\
 Print the character char to the console without buffering.");
 
-#ifdef _WCONIO_DEFINED
 static PyObject *
 msvcrt_putwch(PyObject *self, PyObject *args)
 {
@@ -315,7 +313,6 @@ PyDoc_STRVAR(putwch_doc,
 "putwch(unicode_char) -> None\n\
 \n\
 Wide char variant of putch(), accepting a Unicode value.");
-#endif
 
 static PyObject *
 msvcrt_ungetch(PyObject *self, PyObject *args)
@@ -337,7 +334,6 @@ PyDoc_STRVAR(ungetch_doc,
 Cause the character char to be \"pushed back\" into the console buffer;\n\
 it will be the next character read by getch() or getche().");
 
-#ifdef _WCONIO_DEFINED
 static PyObject *
 msvcrt_ungetwch(PyObject *self, PyObject *args)
 {
@@ -356,7 +352,6 @@ PyDoc_STRVAR(ungetwch_doc,
 "ungetwch(unicode_char) -> None\n\
 \n\
 Wide char variant of ungetch(), accepting a Unicode value.");
-#endif
 
 static void
 insertint(PyObject *d, char *name, int value)
@@ -385,12 +380,10 @@ static struct PyMethodDef msvcrt_functions[] = {
     {"getche",                  msvcrt_getche, METH_VARARGS, getche_doc},
     {"putch",                   msvcrt_putch, METH_VARARGS, putch_doc},
     {"ungetch",                 msvcrt_ungetch, METH_VARARGS, ungetch_doc},
-#ifdef _WCONIO_DEFINED
     {"getwch",                  msvcrt_getwch, METH_VARARGS, getwch_doc},
     {"getwche",                 msvcrt_getwche, METH_VARARGS, getwche_doc},
     {"putwch",                  msvcrt_putwch, METH_VARARGS, putwch_doc},
     {"ungetwch",                msvcrt_ungetwch, METH_VARARGS, ungetwch_doc},
-#endif
     {NULL,                      NULL}
 };
 
