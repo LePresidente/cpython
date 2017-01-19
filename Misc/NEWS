@@ -2,13 +2,106 @@
 Python News
 +++++++++++
 
-What's New in Python 2.7.13?
+What's New in Python 2.7.14?
 ============================
 
 *Release date: XXXX-XX-XX*
 
 Core and Builtins
 -----------------
+
+- Issue #29145: Fix overflow checks in string, bytearray and unicode.
+  Patch by jan matejek and Xiang Zhang.
+
+- Issue #28932: Do not include <sys/random.h> if it does not exist.
+
+Extension Modules
+-----------------
+
+- Issue #29169: Update zlib to 1.2.10.
+
+Library
+-------
+
+- Issue #29219: Fixed infinite recursion in the repr of uninitialized
+  ctypes.CDLL instances.
+
+- Issue #29082: Fixed loading libraries in ctypes by unicode names on Windows.
+  Original patch by Chi Hsuan Yen.
+
+- Issue #29188: Support glibc 2.24 on Linux: don't use getentropy() function
+  but read from /dev/urandom to get random bytes, for example in os.urandom().
+  On Linux, getentropy() is implemented which getrandom() is blocking mode,
+  whereas os.urandom() should not block.
+
+- Issue #29142: In urllib, suffixes in no_proxy environment variable with
+  leading dots could match related hostnames again (e.g. .b.c matches a.b.c).
+  Patch by Milan Oberkirch.
+
+- Issue #29094: Offsets in a ZIP file created with extern file object and mode
+  "w" now are relative to the start of the file.
+
+- Issue #13051: Fixed recursion errors in large or resized
+  curses.textpad.Textbox.  Based on patch by Tycho Andersen.
+
+- Issue #9770: curses.ascii predicates now work correctly with negative
+  integers.
+
+- Issue #28427: old keys should not remove new values from
+  WeakValueDictionary when collecting from another thread.
+
+- Issue #28998: More APIs now support longs as well as ints.
+
+- Issue 28923: Remove editor artifacts from Tix.py,
+  including encoding not recognized by codecs.lookup.
+
+- Issue #29019: Fix dict.fromkeys(x) overallocates when x is sparce dict.
+  Original patch by Rasmus Villemoes.
+
+- Issue #19542: Fix bugs in WeakValueDictionary.setdefault() and
+  WeakValueDictionary.pop() when a GC collection happens in another
+  thread.
+
+- Issue #28925: cPickle now correctly propagates errors when unpickle instances
+  of old-style classes.
+
+Build
+-----
+
+- Issue #28768: Fix implicit declaration of function _setmode. Patch by
+  Masayuki Yamamoto
+
+
+What's New in Python 2.7.13
+===========================
+
+*Release date: 2016-12-17*
+
+Core and Builtins
+-----------------
+
+- Revert a37cc3d926ec (Issue #5322).
+
+
+What's New in Python 2.7.13 release candidate 1?
+================================================
+
+*Release date: 2016-12-03*
+
+Core and Builtins
+-----------------
+
+- Issue #5322: Fixed setting __new__ to a PyCFunction inside Python code.
+  Original patch by Andreas Stührk.
+
+- Issue #28847: dumbdbm no longer writes the index file in when it is not
+  changed and supports reading read-only files.
+
+- Issue #11145: Fixed miscellaneous issues with C-style formatting of types
+  with custom __oct__ and __hex__.
+
+- Issue #24469: Fixed memory leak caused by int subclasses without overridden
+  tp_free (e.g. C-inherited Cython classes).
 
 - Issue #19398: Extra slash no longer added to sys.path components in case of
   empty compile-time PYTHONPATH components.
@@ -323,6 +416,19 @@ Windows
 
 - Issue #27888: Prevent Windows installer from displaying console windows and
   failing when pip cannot be installed/uninstalled.
+
+Mac OS X
+--------
+
+- Issue #28440: No longer add /Library/Python/site-packages, the Apple-supplied
+  system Python site-packages directory, to sys.path for macOS framework builds.
+  The coupling between the two Python instances often caused confusion and, as
+  of macOS 10.12, changes to the site-packages layout can cause pip component
+  installations to fail.  This change reverts the effects introduced in 2.7.0
+  by Issue #4865.  If you are using a package with both the Apple system Python
+  2.7 and a user-installed Python 2.7, you will need to ensure that copies of
+  the package are installed with both Python instances.
+
 
 What's New in Python 2.7.12?
 ============================

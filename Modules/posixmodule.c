@@ -6967,8 +6967,10 @@ posix_fdopen(PyObject *self, PyObject *args)
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
     PyMem_FREE(mode);
-    if (fp == NULL)
+    if (fp == NULL) {
+        Py_DECREF(f);
         return posix_error();
+    }
     /* We now know we will succeed, so initialize the file object. */
     ((PyFileObject *)f)->f_fp = fp;
     PyFile_SetBufSize(f, bufsize);

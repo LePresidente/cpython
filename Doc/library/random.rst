@@ -71,17 +71,17 @@ from sources provided by the operating system.
 Bookkeeping functions:
 
 
-.. function:: seed([x])
+.. function:: seed(a=None)
 
-   Initialize the basic random number generator. Optional argument *x* can be any
-   :term:`hashable` object. If *x* is omitted or ``None``, current system time is used;
-   current system time is also used to initialize the generator when the module is
-   first imported.  If randomness sources are provided by the operating system,
-   they are used instead of the system time (see the :func:`os.urandom` function
-   for details on availability).
+   Initialize internal state of the random number generator.
 
-   If a :term:`hashable` object is given, deterministic results are only assured
-   when :envvar:`PYTHONHASHSEED` is disabled.
+   ``None`` or no argument seeds from current time or from an operating
+   system specific randomness source if available (see the :func:`os.urandom`
+   function for details on availability).
+
+   If *a* is not ``None`` or an :class:`int` or a :class:`long`, then
+   ``hash(a)`` is used instead.  Note that the hash values for some types
+   are nondeterministic when :envvar:`PYTHONHASHSEED` is enabled.
 
    .. versionchanged:: 2.4
       formerly, operating system resources were not used.
@@ -343,7 +343,7 @@ Examples of basic usage::
 
    M. Matsumoto and T. Nishimura, "Mersenne Twister: A 623-dimensionally
    equidistributed uniform pseudorandom number generator", ACM Transactions on
-   Modeling and Computer Simulation Vol. 8, No. 1, January pp.3-30 1998.
+   Modeling and Computer Simulation Vol. 8, No. 1, January pp.3--30 1998.
 
    Wichmann, B. A. & Hill, I. D., "Algorithm AS 183: An efficient and portable
    pseudo-random number generator", Applied Statistics 31 (1982) 188-190.
